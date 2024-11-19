@@ -3,6 +3,7 @@ import sys
 
 nodeNames = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 nodelist = []
+dampeningFactor = 0.0
 
 
 # definition of a standard node
@@ -15,23 +16,31 @@ class Node:
         self.incomingConnections.append(incomingnode)
 
     def debugnode(self):
-        print("Debug of Node ", self.nodeName, ":")
-        print(self.incomingConnections)
-        print("--- End of Debug for Node ", self.nodeName, " ---")
+        print("--- Debug of Node", self.nodeName + ":")
+        print("Incoming Connections:", self.incomingConnections)
+        print("--- End of Debug for Node", self.nodeName, "--- \n")
 
 
 
 def initnodes():
     global dampeningFactor
+    global nodelist
+
     dampeningFactor = float(input("Was ist dein 'd' Wert?"))
     print("Debug: dampeningFactor = ", dampeningFactor) if debug else None
-    nodeAmount = int(input("Wie viele Nodes gibt es? (>= 2 & <= 26)"))
-
-    for i in range(nodeAmount):
+    nodeamount = int(input("Wie viele Nodes gibt es? (>= 2 & <= 26)"))
+    for i in range(nodeamount):
         nodelist.append(Node(nodeNames[i]))
+    return nodelist
 
-    for node in nodelist:
-        node.debugnode()
+
+
+def initconnections(newnodes):
+    for node in newnodes:
+        connectionamount = int(input("Wie viele eingehende Verbindungen hat Node '" + node.nodeName + "'"))
+        for j in range(connectionamount):
+            node.newconnection(input(f"Von wo stammt die {j + 1}. Verbindung zu Node {node.nodeName}?"))
+        if debug: node.debugnode()
 
 
 
@@ -40,4 +49,5 @@ if __name__ == '__main__':
         debug = True
         print("Debug mode enabled")
 
-    initnodes()
+    nodelist = initnodes()
+    initconnections(nodelist)
