@@ -10,7 +10,9 @@ dampeningFactor = 0.0
 class Node:
     def __init__(self, name):
         self.incomingConnections = []
+        self.ranking = []
         self.nodeName = name
+        self.ranking.append(0)
 
     def newconnection(self, incomingnode):
         self.incomingConnections.append(incomingnode)
@@ -18,6 +20,7 @@ class Node:
     def debugnode(self):
         print("--- Debug of Node", self.nodeName + ":")
         print("Incoming Connections:", self.incomingConnections)
+        print("Rankings:", self.ranking)
         print("--- End of Debug for Node", self.nodeName, "--- \n")
 
 
