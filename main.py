@@ -2,17 +2,19 @@ import sys
 
 
 nodeNames = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-nodelist = []
+nodedict = {}
 dampeningFactor = 0.0
+backlinks = 0.0
 
 
 # definition of a standard node
 class Node:
     def __init__(self, name):
         self.incomingConnections = []
-        self.ranking = []
         self.nodeName = name
+        self.ranking = []
         self.ranking.append(0)
+        self.outgoingConnections = []
 
     def newconnection(self, incomingnode):
         self.incomingConnections.append(incomingnode)
@@ -27,7 +29,7 @@ class Node:
 
 def initnodes():
     global dampeningFactor
-    global nodelist # Die Node Instanzen werden in einer globalen Liste gespeichert
+    global nodedict # Die Node Instanzen werden in einer globalen Liste gespeichert
     # User gibt den dampening Faktor d an TODO: input validation + error handling
     dampeningFactor = float(input("Was ist dein 'd' Wert?"))
     print("Debug: dampeningFactor = ", dampeningFactor) if debug else None
@@ -36,19 +38,34 @@ def initnodes():
     # Aktuell ist 26 das maximum, da die Nodes von A bis Z benannt werden sollte aber 100 % ausreichen
     nodeamount = int(input("Wie viele Nodes gibt es? (>= 2 & <= 26)"))
     for i in range(nodeamount):
-        nodelist.append(Node(nodeNames[i]))
-    return nodelist
+        nodedict[nodeNames[i]] = Node(nodeNames[i])
+    return nodedict
 
 
 
 def initconnections(newnodes):
     # TODO: input validation + error handling
-    for node in newnodes:
+    for node in newnodes.values():
         connectionamount = int(input("Wie viele eingehende Verbindungen hat Node '" + node.nodeName + "'"))
         for j in range(connectionamount):
             node.newconnection(input(f"Von wo stammt die {j + 1}. Verbindung zu Node {node.nodeName}?"))
         if debug: node.debugnode()
 
+    for nname, node in newnodes.items():
+        for incoming in node.incomingConnections:
+            nodedict.get(incoming).outgoingConnections.append(incoming)
+
+
+
+def calculatepageranks(in_tocalc, in_nodedict):
+    global backlinks
+    for i in range(1, in_tocalc + 1):
+        for name, nodecon in in_nodedict.items():
+            for j in nodecon.incomingConnections:
+                 backlinks = backlinks + (in_nodedict.get(j).ranking[i-1] / len(in_nodedict.get(j).outgoingConnections))
+            nodecon.ranking.append(( 1 - dampeningFactor ) + dampeningFactor * backlinks)
+            backlinks = 0.0
+    return in_nodedict
 
 
 if __name__ == '__main__':
@@ -57,10 +74,20 @@ if __name__ == '__main__':
         debug = True
         print("Debug mode enabled")
 
-    nodelist = initnodes()
-    initconnections(nodelist)
+    nodedict = initnodes()
+    initconnections(nodedict)
+    print(nodedict)
+
     # TODO: ermitteln, wie oft der Pagerank iterativ berechnet werderen soll
-    # TODO: Iterative Berechnung des Pageranks -> Ergebnisse in einem 2D Array speichern
+    tocalc = int(input("Wie oft soll der Pagerank der Seiten iterativ berechnet werden?: "))
+
+    # TODO: Iterative Berechnung des Pageranks -> Ergebnisse im Jeweiligen Node
+    nodedict = calculatepageranks(tocalc, nodedict)
+
+    print(tocalc)
+    for foo in nodedict.values():
+        print(f"{foo.nodeName}: {foo.ranking}")
+
     # TODO: Formatierte ausgabe der Ergebnisse
     # NTH: Möglichkeit die Eingabe nachzubessern
     # NTH: Nicht lineare Menüführung
