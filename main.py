@@ -1,20 +1,19 @@
 import sys
 
-
 nodeNames = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 nodedict = {}
 dampeningFactor = 0.0
 backlinks = 0.0
 
 
-# definition of a standard node
+# Definition of a Node
 class Node:
     def __init__(self, name, startvalue):
         self.incomingConnections = []
+        self.outgoingConnections = []
         self.nodeName = name
         self.ranking = []
         self.ranking.append(startvalue)
-        self.outgoingConnections = []
 
     def newconnection(self, incomingnode):
         self.incomingConnections.append(incomingnode)
@@ -26,7 +25,6 @@ class Node:
         print("--- End of Debug for Node", self.nodeName, "--- \n")
 
 
-
 def initnodes():
     global dampeningFactor
     global nodedict # Die Node Instanzen werden in einer globalen Liste gespeichert
@@ -36,7 +34,7 @@ def initnodes():
     print("Debug: dampeningFactor = ", dampeningFactor) if debug else None
 
     # User gibt an, wie viele Nodes es gibt.
-    # Aktuell ist 26 das maximum, da die Nodes von A bis Z benannt werden sollte aber 100 % ausreichen
+    # Aktuell ist 26 das Maximum, da die Nodes von A bis Z benannt werden sollte aber 100 % ausreichen
     nodeamount = int(input("Wie viele Nodes gibt es? (>= 2 & <= 26)"))
     initialvalue = int(input("Was soll der Startwert der Pageranks sein?"))
     for i in range(nodeamount):
@@ -75,10 +73,11 @@ if __name__ == '__main__':
     if "-debug" in sys.argv:
         debug = True
         print("Debug mode enabled")
+    else:
+        debug = False
 
     nodedict = initnodes()
     initconnections(nodedict)
-    print(nodedict)
 
     # TODO: ermitteln, wie oft der Pagerank iterativ berechnet werderen soll
     tocalc = int(input("Wie oft soll der Pagerank der Seiten iterativ berechnet werden?: "))
