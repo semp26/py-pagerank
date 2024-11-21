@@ -9,11 +9,11 @@ backlinks = 0.0
 
 # definition of a standard node
 class Node:
-    def __init__(self, name):
+    def __init__(self, name, startvalue):
         self.incomingConnections = []
         self.nodeName = name
         self.ranking = []
-        self.ranking.append(0)
+        self.ranking.append(startvalue)
         self.outgoingConnections = []
 
     def newconnection(self, incomingnode):
@@ -32,13 +32,15 @@ def initnodes():
     global nodedict # Die Node Instanzen werden in einer globalen Liste gespeichert
     # User gibt den dampening Faktor d an TODO: input validation + error handling
     dampeningFactor = float(input("Was ist dein 'd' Wert?"))
+
     print("Debug: dampeningFactor = ", dampeningFactor) if debug else None
 
     # User gibt an, wie viele Nodes es gibt.
     # Aktuell ist 26 das maximum, da die Nodes von A bis Z benannt werden sollte aber 100 % ausreichen
     nodeamount = int(input("Wie viele Nodes gibt es? (>= 2 & <= 26)"))
+    initialvalue = int(input("Was soll der Startwert der Pageranks sein?"))
     for i in range(nodeamount):
-        nodedict[nodeNames[i]] = Node(nodeNames[i])
+        nodedict[nodeNames[i]] = Node(nodeNames[i], initialvalue)
     return nodedict
 
 
