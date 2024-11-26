@@ -26,9 +26,13 @@ def createnamemapping(dict_tomap):
 def initconnections(newnodes):
     mapping = createnamemapping(newnodes)
     for nnode, node in newnodes.items():
-        connectionamount = int(input(f"Wie viele eingehende Verbindungen hat Node '{node.nodeName}'?"))
+        connectionamount = int(
+            input(f"Wie viele eingehende Verbindungen hat Node '{node.nodeName}'?")
+        )
         for j in range(connectionamount):
-            node.newconnection(mapping.get(input(f"Von wo stammt die {j + 1}. Verbindung zu Node {node.nodeName}?")))
+            node.newconnection(mapping.get(
+                input(f"Von wo stammt die {j + 1}. Verbindung zu Node {node.nodeName}?")
+            ))
         if debug: node.debugnode()
 
     for nname, node in newnodes.items():
@@ -54,13 +58,14 @@ def calculatepageranks(in_tocalc, in_nodedict, calc_dampeningfactor):
 
 
 if __name__ == '__main__':
-    nodedict = {}
     # Debug mode, wenn das Program mit der Flag "-debug" aufgerufen wird
     if "-debug" in sys.argv:
         debug = True
         print("Debug mode enabled")
     else:
         debug = False
+
+    nodedict = {}
 
     if "-defaults" in sys.argv:
         print("Default values enabled")
@@ -84,16 +89,10 @@ if __name__ == '__main__':
         nodedict, dampeningFactor = initnodes()
         nodedict = initconnections(nodedict)
 
-        # TODO: ermitteln, wie oft der Pagerank iterativ berechnet werderen soll
         tocalc = int(input("Wie oft soll der Pagerank der Seiten iterativ berechnet werden?: "))
 
-    # TODO: Iterative Berechnung des Pageranks -> Ergebnisse im Jeweiligen Node
     nodedict = calculatepageranks(tocalc, nodedict, dampeningFactor)
 
     print(tocalc)
     for foo in nodedict.values():
         print(f"{foo.nodeName}: {foo.ranking}")
-
-    # TODO: Formatierte ausgabe der Ergebnisse
-    # NTH: Möglichkeit die Eingabe nachzubessern
-    # NTH: Nicht lineare Menüführung
