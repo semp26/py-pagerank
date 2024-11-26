@@ -1,5 +1,5 @@
 import sys
-from Node import Node
+from node import Node
 from app import initconnections, calculatepageranks
 
 
@@ -38,7 +38,7 @@ def runwithdefaults():
     tmphold2.newconnection(id(tmphold1))
     tmphold3.newconnection(id(tmphold1))
     tmphold3.newconnection(id(tmphold2))
-    for defaults_i, defaults_j in nodedict.items():
+    for defaults_j in nodedict.values():
         for incomingcons in defaults_j.incomingConnections:
             nodedict.get(incomingcons).outgoingConnections.append(incomingcons)
     nodedict = calculatepageranks(tocalc, nodedict, dampeningfactor)
@@ -58,8 +58,8 @@ def runnormal(debug):
     nodedict = calculatepageranks(tocalc, nodedict, dampeningfactor)
 
     print(tocalc)
-    for foo in nodedict.values():
-        print(f"{foo.nodeName}: {foo.ranking}")
+    for nodeval in nodedict.values():
+        print(f"{nodeval.nodeName}: {nodeval.ranking}")
 
 
 if __name__ == '__main__':

@@ -11,7 +11,8 @@ def initconnections(newnodes, debug = False):
             node.newconnection(mappingdict.get(
                 input(f"Von wo stammt die {j + 1}. Verbindung zu Node {node.nodeName}?")
             ))
-        if debug: node.debugnode()
+        if debug:
+            node.debugnode()
 
     for node in newnodes.values():
         for incoming in node.incomingConnections:
