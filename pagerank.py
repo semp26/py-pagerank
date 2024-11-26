@@ -4,7 +4,7 @@ from Node import Node
 def initnodes():
     init_dampeningfactor = float(input("Was ist dein 'd' Wert?"))
 
-    print("Debug: dampeningFactor = ", dampeningFactor) if debug else None
+    print("Debug: dampeningFactor = ", Dampeningfactor) if Debug else None
 
     # User gibt an, wie viele Nodes es gibt.
     nodeamount = int(input("Wie viele Nodes gibt es? (>= 2 & <= 26)"))
@@ -33,7 +33,7 @@ def initconnections(newnodes):
             node.newconnection(mapping.get(
                 input(f"Von wo stammt die {j + 1}. Verbindung zu Node {node.nodeName}?")
             ))
-        if debug: node.debugnode()
+        if Debug: node.debugnode()
 
     for nname, node in newnodes.items():
         for incoming in node.incomingConnections:
@@ -46,7 +46,7 @@ def initconnections(newnodes):
 def calculatepageranks(in_tocalc, in_nodedict, calc_dampeningfactor):
     backlinks = 0.0
     for i in range(1, in_tocalc + 1):
-        for name, nodecon in in_nodedict.items():
+        for nodecon in in_nodedict.values():
             for j in nodecon.incomingConnections:
                 backlinks = (backlinks +
                              (in_nodedict.get(j).ranking[i-1]
@@ -60,10 +60,10 @@ def calculatepageranks(in_tocalc, in_nodedict, calc_dampeningfactor):
 if __name__ == '__main__':
     # Debug mode, wenn das Program mit der Flag "-debug" aufgerufen wird
     if "-debug" in sys.argv:
-        debug = True
+        Debug = True
         print("Debug mode enabled")
     else:
-        debug = False
+        Debug = False
 
     nodedict = {}
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
         nodedict[id(tmphold2)] = tmphold2
         tmphold3 = Node("FC", 0)
         nodedict[id(tmphold3)] = tmphold3
-        dampeningFactor = 0.85
+        Dampeningfactor = 0.85
         tocalc = 15
         tmphold1.newconnection(id(tmphold2))
         tmphold2.newconnection(id(tmphold1))
@@ -86,12 +86,12 @@ if __name__ == '__main__':
                 nodedict.get(incomingcons).outgoingConnections.append(incomingcons)
 
     else:
-        nodedict, dampeningFactor = initnodes()
+        nodedict, Dampeningfactor = initnodes()
         nodedict = initconnections(nodedict)
 
         tocalc = int(input("Wie oft soll der Pagerank der Seiten iterativ berechnet werden?: "))
 
-    nodedict = calculatepageranks(tocalc, nodedict, dampeningFactor)
+    nodedict = calculatepageranks(tocalc, nodedict, Dampeningfactor)
 
     print(tocalc)
     for foo in nodedict.values():
