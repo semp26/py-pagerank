@@ -1,6 +1,6 @@
 import sys
 from Node import Node
-from App import *
+from app import initconnections, calculatepageranks
 
 
 def initnodes(nodedict):
@@ -23,7 +23,7 @@ def parseargs(arguments):
     return defaults, debug
 
 
-def runWithDefaults():
+def runwithdefaults():
     nodedict =  {}
     print("Default values enabled")
     tmphold1 = Node("FA", 0)
@@ -44,11 +44,11 @@ def runWithDefaults():
     nodedict = calculatepageranks(tocalc, nodedict, dampeningfactor)
 
     print(tocalc)
-    for foo in nodedict.values():
-        print(f"{foo.nodeName}: {foo.ranking}")
+    for nodeval in nodedict.values():
+        print(f"{nodeval.nodeName}: {nodeval.ranking}")
 
 
-def runNormal(debug):
+def runnormal(debug):
     nodedict = {}
     debugmode = debug
     nodedict, dampeningfactor = initnodes(nodedict)
@@ -66,6 +66,6 @@ if __name__ == '__main__':
     DEFAULTS, DEBUG = parseargs(sys.argv)
 
     if DEFAULTS:
-        runWithDefaults()
+        runwithdefaults()
     else:
-        runNormal(DEBUG)
+        runnormal(DEBUG)
