@@ -1,18 +1,14 @@
-def createnamemapping(dict_tomap):
-    mappeddict = {}
-    for nodeid, node in dict_tomap.items():
-        mappeddict[node.nodeName] = nodeid
-    return mappeddict
-
-
 def initconnections(newnodes, debug = False):
-    mapping = createnamemapping(newnodes)
+    mappingdict = {}
+    for nodeid, node in newnodes.items():
+        mappingdict[node.nodeName] = nodeid
+
     for node in newnodes.values():
         connectionamount = int(
             input(f"Wie viele eingehende Verbindungen hat Node '{node.nodeName}'?")
         )
         for j in range(connectionamount):
-            node.newconnection(mapping.get(
+            node.newconnection(mappingdict.get(
                 input(f"Von wo stammt die {j + 1}. Verbindung zu Node {node.nodeName}?")
             ))
         if debug: node.debugnode()
@@ -22,6 +18,7 @@ def initconnections(newnodes, debug = False):
             newnodes.get(incoming).outgoingConnections.append(incoming)
 
     return newnodes
+
 
 
 def calculatepageranks(in_tocalc, in_nodedict, calc_dampeningfactor):
