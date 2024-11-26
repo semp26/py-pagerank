@@ -25,7 +25,7 @@ def createnamemapping(dict_tomap):
 
 def initconnections(newnodes):
     mapping = createnamemapping(newnodes)
-    for nnode, node in newnodes.items():
+    for node in newnodes.values():
         connectionamount = int(
             input(f"Wie viele eingehende Verbindungen hat Node '{node.nodeName}'?")
         )
@@ -35,7 +35,7 @@ def initconnections(newnodes):
             ))
         if Debug: node.debugnode()
 
-    for nname, node in newnodes.items():
+    for node in newnodes.values():
         for incoming in node.incomingConnections:
             newnodes.get(incoming).outgoingConnections.append(incoming)
 
