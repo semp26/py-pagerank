@@ -34,19 +34,23 @@ def initnodes():
         nodedict[id(nodetemp)] = nodetemp
     return nodedict, init_dampeningfactor
 
-
+def createnamemapping(dict_tomap):
+    mappeddict = {}
+    for nodeid, node in dict_tomap.items():
+        mappeddict[node.nodeName] = nodeid
+    return mappeddict
 
 def initconnections(newnodes):
-    # TODO: input validation + error handling
+    mapping = createnamemapping(newnodes)
     for nnode, node in newnodes.items():
         connectionamount = int(input(f"Wie viele eingehende Verbindungen hat Node '{node.nodeName}'?"))
         for j in range(connectionamount):
-            node.newconnection(id(newnodes.get(input(f"Von wo stammt die {j + 1}. Verbindung zu Node {node.nodeName}?"))))
+            node.newconnection(mapping.get(input(f"Von wo stammt die {j + 1}. Verbindung zu Node {node.nodeName}?")))
         if debug: node.debugnode()
 
     for nname, node in newnodes.items():
         for incoming in node.incomingConnections:
-            newnodes.get(str(incoming)).outgoingConnections.append(incoming)
+            newnodes.get(incoming).outgoingConnections.append(incoming)
 
     return newnodes
 
