@@ -7,11 +7,12 @@ def initnodes():
     print("Debug: dampeningFactor = ", dampeningFactor) if debug else None
 
     # User gibt an, wie viele Nodes es gibt.
-    # Aktuell ist 26 das Maximum, da die Nodes von A bis Z benannt werden sollte aber 100 % ausreichen
     nodeamount = int(input("Wie viele Nodes gibt es? (>= 2 & <= 26)"))
     initialvalue = int(input("Was soll der Startwert der Pageranks sein?"))
     for i in range(nodeamount):
-        nametmp = str(input(f"Wie soll die {i+1}. Node heißen? (Node Namen dürfen nicht doppelt sein)"))
+        nametmp = str(input(
+            f"Wie soll die {i+1}. Node heißen? (Node Namen dürfen nicht doppelt sein)"
+        ))
         nodetemp = Node(nametmp, initialvalue)
         nodedict[id(nodetemp)] = nodetemp
     return nodedict, init_dampeningfactor
@@ -43,8 +44,11 @@ def calculatepageranks(in_tocalc, in_nodedict, calc_dampeningfactor):
     for i in range(1, in_tocalc + 1):
         for name, nodecon in in_nodedict.items():
             for j in nodecon.incomingConnections:
-                 backlinks = backlinks + (in_nodedict.get(j).ranking[i-1] / len(in_nodedict.get(j).outgoingConnections))
-            nodecon.ranking.append(( 1 - calc_dampeningfactor ) + calc_dampeningfactor * backlinks)
+                backlinks = (backlinks +
+                             (in_nodedict.get(j).ranking[i-1]
+                              / len(in_nodedict.get(j).outgoingConnections)))
+            nodecon.ranking.append(( 1 - calc_dampeningfactor ) +
+                                   calc_dampeningfactor * backlinks)
             backlinks = 0.0
     return in_nodedict
 
