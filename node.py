@@ -7,6 +7,7 @@ class Node:
         self.ranking.append(startvalue)
 
     def newconnection(self, incomingnode):
+        # Die ID der Node, von welcher die eingehende Verbindung ausgeht wird in die Liste angefügt
         self.incomingConnections.append(int(incomingnode))
 
     def debugnode(self):
